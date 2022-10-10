@@ -1,12 +1,12 @@
 <template>
 <div class="list row">
-  <div class="col-md-8">
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Search by title" v-model="title" @keyup.enter="searchTitle"/>
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" @click="searchTitle">Search</button>
-      </div>
+  <div class="input-group mb-3 w-100">
+    <input type="text" class="form-control" placeholder="Search by title" v-model="title" @keyup.enter="searchTitle"/>
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" @click="searchTitle">Search</button>
     </div>
+  </div>
+  <div class="col-md-8 row w-100">
     <div class="col-md-6">
       <h4>Book list</h4>
       <ul class="list-group">
@@ -22,8 +22,8 @@
     <div class="col-md-6">
       <div v-if="currentBook">
         <h4>Book</h4>
-        <div><label><strong>Description:</strong></label>{{ currentBook.description }}</div>
-        <div><label><strong>Status:</strong></label>{{ currentBook.available ? "Available" : "Pending" }}</div>
+        <div><label><strong>Description:</strong></label><p>{{ currentBook.description }}</p></div>
+        <div><label><strong>Status:</strong></label><p>{{ currentBook.available ? "Available" : "Pending" }}</p></div>
         <a class="btn btn-success" @click="goToBook" >Edit</a>
       </div>
       <div v-else>
@@ -55,7 +55,6 @@ export default {
     async getBooks() {
       const response = await BookService.getAll()
       this.books = response.data
-      console.log(response.data)
     },
     refreshList() {
       this.getBooks()
@@ -86,5 +85,6 @@ export default {
   text-align: left;
   max-width: 750px;
   margin: auto;
+  justify-content: center;
 }
 </style>

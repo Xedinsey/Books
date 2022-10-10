@@ -10,7 +10,7 @@
         <label for="description">
           Description
         </label>
-        <input type="text" class="form-control" id="description" v-model="currentBook.description"/>
+        <textarea type="text" class="form-control" id="description" v-model="currentBook.description" maxlength="1000" rows="7"/>
       </div>
       <div class="form-group">
         <label><strong>Status:</strong></label>
@@ -18,7 +18,7 @@
       </div>
     </form>
     <button
-        class="btn btn-primary"
+        class="btn btn-primary ms-0"
         v-if="currentBook.available"
         @click="updateAvailable(false)"
     >UnAvailable
@@ -28,6 +28,12 @@
         class="btn btn-primary"
         @click="updateAvailable(true)"
     >Available
+    </button>
+    <button
+
+        class="btn btn-success"
+        @click="updateBook"
+    >Append
     </button>
     <button
         class="btn btn-danger"
@@ -63,7 +69,6 @@ export default {
       BookService.get(id)
           .then(response => {
             this.currentBook = response.data
-            console.log(response.data)
           })
           .catch(e => {
             console.log(e)
@@ -77,30 +82,23 @@ export default {
         available: status
       }
       BookService.update(this.currentBook.id, data)
-          .then(response => {
+          .then(
             this.currentBook.available = status
-            console.log(response.data)
-          })
+          )
           .catch(e => {
             console.log(e)
           })
     },
-    updateBook() {
-      BookService.update(this.currentBook.id, this.currentBook)
-          .then(response=>{
-            console.log(response.data)
-            this.message='The book was update success'
-          })
-          .catch(e=>{
-            console.log(e)
-          })
+    async updateBook() {
+      await BookService.update(this.currentBook.id, this.currentBook)
+      this.message='The book was update success'
+      setTimeout(()=> {
+        this.$router.push({name: 'book-list'})
+      }, 2000)
     },
     deleteBook(){
       BookService.delete(this.currentBook.id)
-          .then(response=>{
-            console.log(response.data)
-            this.$router.push({name: 'books'})
-          })
+          .then(this.$router.push({name: 'book-list'}))
           .catch(e=>{
             console.log(e)
           })
@@ -112,7 +110,7 @@ export default {
 
 <style scoped>
 .edit-form {
-  max-width: 300px;
+  max-width: 350px;
   margin: auto;
 
 }
